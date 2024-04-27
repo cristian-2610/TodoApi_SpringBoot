@@ -21,16 +21,16 @@ public class JwtService {
     @Value("${env.secret_key}")
     private String secret_key;
 
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(userDetails, new HashMap<>());
+    public String generateToken(String email) {
+        return generateToken(email, new HashMap<>());
     }
 
-    public String generateToken(UserDetails user, Map<String, Object> extraClaims) {
-        return Jwts.builder()
+    public String generateToken(String email, Map<String, Object> extraClaims) {
+        return "Bearer " + Jwts.builder()
                 .addClaims(extraClaims)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 604800000))
-                .setSubject(user.getUsername())
+                .setSubject(email)
                 .signWith(getSingKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
